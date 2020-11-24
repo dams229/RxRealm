@@ -276,107 +276,107 @@ public extension Observable {
 
 // MARK: Realm type extensions
 
-extension Realm: ReactiveCompatible {}
-
-extension Reactive where Base == Realm {
-    /**
-     Returns bindable sink wich adds object sequence to the current Realm
-
-     - parameter: update - update according to Realm.UpdatePolicy
-     - parameter: onError - closure to implement custom error handling
-     - returns: `AnyObserver<S>`, which you can use to subscribe an `Observable` to
-     */
-    public func add<S: Sequence>(update: Realm.UpdatePolicy = .error, onError: ((S?, Error) -> Void)? = nil)
-        -> AnyObserver<S> where S.Iterator.Element: Object {
-            return RealmObserver(realm: base) { realm, elements, error in
-                guard let realm = realm else {
-                    onError?(nil, error ?? RxRealmError.unknown)
-                    return
-                }
-
-                do {
-                    try realm.write {
-                        realm.add(elements, update: update)
-                    }
-                } catch let e {
-                    onError?(elements, e)
-                }
-                }
-                .asObserver()
-    }
-
-    /**
-     Returns bindable sink wich adds an object to Realm
-
-     - parameter: update - update according to Realm.UpdatePolicy
-     - parameter: onError - closure to implement custom error handling
-     - returns: `AnyObserver<O>`, which you can use to subscribe an `Observable` to
-     */
-    public func add<O: Object>(update: Realm.UpdatePolicy = .error,
-                               onError: ((O?, Error) -> Void)? = nil) -> AnyObserver<O> {
-        return RealmObserver(realm: base) { realm, element, error in
-            guard let realm = realm else {
-                onError?(nil, error ?? RxRealmError.unknown)
-                return
-            }
-
-            do {
-                try realm.write {
-                    realm.add(element, update: update)
-                }
-            } catch let e {
-                onError?(element, e)
-            }
-            }.asObserver()
-    }
-
-    /**
-     Returns bindable sink wich deletes objects in sequence from Realm.
-
-     - parameter: onError - closure to implement custom error handling
-     - returns: `AnyObserver<S>`, which you can use to subscribe an `Observable` to
-     */
-    public func delete<S: Sequence>(onError: ((S?, Error) -> Void)? = nil)
-        -> AnyObserver<S> where S.Iterator.Element: Object {
-            return RealmObserver(realm: base, binding: { realm, elements, error in
-                guard let realm = realm else {
-                    onError?(nil, error ?? RxRealmError.unknown)
-                    return
-                }
-
-                do {
-                    try realm.write {
-                        realm.delete(elements)
-                    }
-                } catch let e {
-                    onError?(elements, e)
-                }
-            }).asObserver()
-    }
-
-    /**
-     Returns bindable sink wich deletes objects in sequence from Realm.
-
-     - parameter: onError - closure to implement custom error handling
-     - returns: `AnyObserver<O>`, which you can use to subscribe an `Observable` to
-     */
-    public func delete<O: Object>(onError: ((O?, Error) -> Void)? = nil) -> AnyObserver<O> {
-        return RealmObserver(realm: base, binding: { realm, element, error in
-            guard let realm = realm else {
-                onError?(nil, error ?? RxRealmError.unknown)
-                return
-            }
-
-            do {
-                try realm.write {
-                    realm.delete(element)
-                }
-            } catch let e {
-                onError?(element, e)
-            }
-        }).asObserver()
-    }
-}
+//extension Realm: ReactiveCompatible {}
+//
+//extension Reactive where Base == Realm {
+//    /**
+//     Returns bindable sink wich adds object sequence to the current Realm
+//
+//     - parameter: update - update according to Realm.UpdatePolicy
+//     - parameter: onError - closure to implement custom error handling
+//     - returns: `AnyObserver<S>`, which you can use to subscribe an `Observable` to
+//     */
+//    public func add<S: Sequence>(update: Realm.UpdatePolicy = .error, onError: ((S?, Error) -> Void)? = nil)
+//        -> AnyObserver<S> where S.Iterator.Element: Object {
+//            return RealmObserver(realm: base) { realm, elements, error in
+//                guard let realm = realm else {
+//                    onError?(nil, error ?? RxRealmError.unknown)
+//                    return
+//                }
+//
+//                do {
+//                    try realm.write {
+//                        realm.add(elements, update: update)
+//                    }
+//                } catch let e {
+//                    onError?(elements, e)
+//                }
+//                }
+//                .asObserver()
+//    }
+//
+//    /**
+//     Returns bindable sink wich adds an object to Realm
+//
+//     - parameter: update - update according to Realm.UpdatePolicy
+//     - parameter: onError - closure to implement custom error handling
+//     - returns: `AnyObserver<O>`, which you can use to subscribe an `Observable` to
+//     */
+//    public func add<O: Object>(update: Realm.UpdatePolicy = .error,
+//                               onError: ((O?, Error) -> Void)? = nil) -> AnyObserver<O> {
+//        return RealmObserver(realm: base) { realm, element, error in
+//            guard let realm = realm else {
+//                onError?(nil, error ?? RxRealmError.unknown)
+//                return
+//            }
+//
+//            do {
+//                try realm.write {
+//                    realm.add(element, update: update)
+//                }
+//            } catch let e {
+//                onError?(element, e)
+//            }
+//            }.asObserver()
+//    }
+//
+//    /**
+//     Returns bindable sink wich deletes objects in sequence from Realm.
+//
+//     - parameter: onError - closure to implement custom error handling
+//     - returns: `AnyObserver<S>`, which you can use to subscribe an `Observable` to
+//     */
+//    public func delete<S: Sequence>(onError: ((S?, Error) -> Void)? = nil)
+//        -> AnyObserver<S> where S.Iterator.Element: Object {
+//            return RealmObserver(realm: base, binding: { realm, elements, error in
+//                guard let realm = realm else {
+//                    onError?(nil, error ?? RxRealmError.unknown)
+//                    return
+//                }
+//
+//                do {
+//                    try realm.write {
+//                        realm.delete(elements)
+//                    }
+//                } catch let e {
+//                    onError?(elements, e)
+//                }
+//            }).asObserver()
+//    }
+//
+//    /**
+//     Returns bindable sink wich deletes objects in sequence from Realm.
+//
+//     - parameter: onError - closure to implement custom error handling
+//     - returns: `AnyObserver<O>`, which you can use to subscribe an `Observable` to
+//     */
+//    public func delete<O: Object>(onError: ((O?, Error) -> Void)? = nil) -> AnyObserver<O> {
+//        return RealmObserver(realm: base, binding: { realm, element, error in
+//            guard let realm = realm else {
+//                onError?(nil, error ?? RxRealmError.unknown)
+//                return
+//            }
+//
+//            do {
+//                try realm.write {
+//                    realm.delete(element)
+//                }
+//            } catch let e {
+//                onError?(element, e)
+//            }
+//        }).asObserver()
+//    }
+//}
 
 extension Reactive where Base == Realm {
     /**
